@@ -1,0 +1,409 @@
+Q=>Given an integer array nums of length n and an integer target, find three integers in nums such that the sum is closest to the target. Return the sum of the three integers.
+Sol=>
+#include <bits/stdc++.h>
+int threeSumClosest(std::vector<int>& nums, int target) {
+    std::sort(nums.begin(), nums.end());
+    int n = nums.size();
+    int closestSum = INT_MAX;
+
+    for (int i = 0; i < n - 2; ++i) {
+        int left = i + 1;
+        int right = n - 1;
+
+        while (left < right) {
+            int currentSum = nums[i] + nums[left] + nums[right];
+
+            if (currentSum == target) {
+                return target;
+            }
+
+            if (std::abs(currentSum - target) < std::abs(closestSum - target)) {
+                closestSum = currentSum;
+            }
+
+            if (currentSum < target) {
+                ++left;
+            } else {
+                --right;
+            }
+        }
+    }
+
+    return closestSum;
+}
+
+int main() {
+    int n;
+    std::cout << "Enter the length of the array: ";
+    std::cin >> n;
+
+    std::vector<int> nums(n);
+    std::cout << "Enter the elements of the array: ";
+    for (int i = 0; i < n; ++i) {
+        std::cin >> nums[i];
+    }
+
+    int target;
+    std::cout << "Enter the target value: ";
+    std::cin >> target;
+
+    int result = threeSumClosest(nums, target);
+
+    std::cout << "Closest sum to the target: " << result << std::endl;
+
+    return 0;
+}
+
+
+Input: nums = [-1,2,1,-4], target = 1
+Output: 2
+#####################################################################################################################
+Q=>Given an array nums of n integers, return an array of all the unique quadruplets
+[nums[a], nums[b], nums[c], nums[d]] such that:
+           ● 0 <= a, b, c, d < n
+           ● a, b, c, and d are distinct.
+           ● nums[a] + nums[b] + nums[c] + nums[d] == target
+
+Sol=>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+std::vector<std::vector<int>> fourSum(std::vector<int>& nums, int target) {
+    std::sort(nums.begin(), nums.end());
+    int n = nums.size();
+    std::vector<std::vector<int>> quadruplets;
+
+    for (int i = 0; i < n - 3; ++i) {
+        // Skip duplicates for the first element
+        if (i > 0 && nums[i] == nums[i - 1])
+            continue;
+
+        for (int j = i + 1; j < n - 2; ++j) {
+            // Skip duplicates for the second element
+            if (j > i + 1 && nums[j] == nums[j - 1])
+                continue;
+
+            int left = j + 1;
+            int right = n - 1;
+
+            while (left < right) {
+                int currentSum = nums[i] + nums[j] + nums[left] + nums[right];
+
+                if (currentSum == target) {
+                    quadruplets.push_back({ nums[i], nums[j], nums[left], nums[right] });
+
+                    // Skip duplicates for the third element
+                    while (left < right && nums[left] == nums[left + 1])
+                        ++left;
+
+                    // Skip duplicates for the fourth element
+                    while (left < right && nums[right] == nums[right - 1])
+                        --right;
+
+                    ++
+
+
+Input: nums = [1,0,-1,0,-2,2], target = 0
+Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
+#####################################################################################################################
+Q=>A permutation of an array of integers is an arrangement of its members into a
+sequence or linear order.
+
+Sol=>#include <vector>
+#include <algorithm>
+
+void nextPermutation(std::vector<int>& nums) {
+    int n = nums.size();
+    int i = n - 2;
+
+    // Find the first pair from the right where nums[i] < nums[i+1]
+    while (i >= 0 && nums[i] >= nums[i + 1]) {
+        --i;
+    }
+
+    if (i >= 0) {
+        // Find the smallest element to the right of nums[i] that is greater than nums[i]
+        int j = n - 1;
+        while (j > i && nums[j] <= nums[i]) {
+            --j;
+        }
+
+        // Swap nums[i] and nums[j]
+        std::swap(nums[i], nums[j]);
+    }
+
+    // Reverse the elements to the right of nums[i]
+    std::reverse(nums.begin() + i + 1, nums.end());
+}
+
+int main() {
+    int n;
+    std::cout << "Enter the length of the array: ";
+    std::cin >> n;
+
+    std::vector<int> nums(n);
+    std::cout << "Enter the elements of the array: ";
+    for (int i = 0; i < n; ++i) {
+        std::cin >> nums[i];
+    }
+
+    nextPermutation(nums);
+
+    std::cout << "Next permutation: ";
+    for (int num : nums) {
+        std::cout << num << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
+
+
+Input: nums = [1,2,3]
+Output: [1,3,2]
+#####################################################################################################################
+Q=>Given a sorted array of distinct integers and a target value, return the index if the
+target is found. If not, return the index where it would be if it were inserted in
+order.
+Sol=>#include <vector>
+
+int searchInsert(std::vector<int>& nums, int target) {
+    int left = 0;
+    int right = nums.size();
+
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+
+        if (nums[mid] == target) {
+            return mid;
+        } else if (nums[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid;
+        }
+    }
+
+    return left;
+}
+
+int main() {
+    int n;
+    std::cout << "Enter the length of the array: ";
+    std::cin >> n;
+
+    std::vector<int> nums(n);
+    std::cout << "Enter the elements of the sorted array: ";
+    for (int i = 0; i < n; ++i) {
+        std::cin >> nums[i];
+    }
+
+    int target;
+    std::cout << "Enter the target value: ";
+    std::cin >> target;
+
+    int index = searchInsert(nums, target);
+
+    std::cout << "Index where the target should be inserted: " << index << std::endl;
+
+    return 0;
+}
+
+
+Input: nums = [1,3,5,6], target = 5
+Output: 2
+#####################################################################################################################
+Q=>You are given a large integer represented as an integer array digits, where each
+digits[i] is the ith digit of the integer. The digits are ordered from most significant
+to least significant in left-to-right order. The large integer does not contain any
+leading 0's.
+
+Sol=>#include <vector>
+
+std::vector<int> plusOne(std::vector<int>& digits) {
+    int n = digits.size();
+    int carry = 1;
+
+    for (int i = n - 1; i >= 0; --i) {
+        int sum = digits[i] + carry;
+        digits[i] = sum % 10;
+        carry = sum / 10;
+    }
+
+    if (carry == 1) {
+        digits.insert(digits.begin(), 1);
+    }
+
+    return digits;
+}
+int main() {
+    int n;
+    std::cout << "Enter the length of the integer array: ";
+    std::cin >> n;
+
+    std::vector<int> digits(n);
+    std::cout << "Enter the digits of the large integer: ";
+    for (int i = 0; i < n; ++i) {
+        std::cin >> digits[i];
+    }
+
+    std::vector<int> result = plusOne(digits);
+
+    std::cout << "Resulting array after increment: ";
+    for (int digit : result) {
+        std::cout << digit << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
+
+
+Input: digits = [1,2,3]
+Output: [1,2,4]
+#####################################################################################################################
+Q=>Given a non-empty array of integers nums, every element appears twice except
+for one. Find that single one.
+Sol=>
+#include <iostream>
+#include <vector>
+int singleNumber(std::vector<int>& nums) {
+    int result = 0;
+
+    for (int num : nums) {
+        result ^= num;
+    }
+
+    return result;
+}
+
+int main() {
+    int n;
+    std::cout << "Enter the length of the array: ";
+    std::cin >> n;
+
+    std::vector<int> nums(n);
+    std::cout << "Enter the elements of the array: ";
+    for (int i = 0; i < n; ++i) {
+        std::cin >> nums[i];
+    }
+
+    int single = singleNumber(nums);
+
+    std::cout << "The single number is: " << single << std::endl;
+
+    return 0;
+}
+
+
+Input: nums = [2,2,1]
+Output: 1
+#####################################################################################################################
+Q=>
+You are given an inclusive range [lower, upper] and a sorted unique integer array
+nums, where all elements are within the inclusive range.
+
+Sol=>#include <vector>
+#include <string>
+
+std::vector<std::string> findMissingRanges(std::vector<int>& nums, int lower, int upper) {
+    std::vector<std::string> result;
+    long long start = lower;  // Use long long to handle the edge case of INT_MAX + 1
+
+    for (int num : nums) {
+        if (num > start + 1) {
+            result.push_back(getRange(start, num - 1));
+        }
+        start = static_cast<long long>(num) + 1;
+    }
+
+    if (start <= upper) {
+        result.push_back(getRange(start, upper));
+    }
+
+    return result;
+}
+
+std::string getRange(long long start, long long end) {
+    if (start == end) {
+        return std::to_string(start);
+    } else {
+        return std::to_string(start) + "->" + std::to_string(end);
+    }
+}
+
+int main() {
+    int lower, upper;
+    std::cout << "Enter the lower bound: ";
+    std::cin >> lower;
+    std::cout << "Enter the upper bound: ";
+    std::cin >> upper;
+
+    int n;
+    std::cout << "Enter the length of the array: ";
+    std::cin >> n;
+
+    std::vector<int> nums(n);
+    std::cout << "Enter the elements of the array (sorted): ";
+    for (int i = 0; i < n; ++i) {
+        std::cin >> nums[i];
+    }
+
+    std::vector<std::string> missingRanges = findMissingRanges(nums, lower, upper);
+
+    std::cout << "Missing Ranges: ";
+    for (const std::string& range : missingRanges) {
+        std::cout << range << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
+
+
+Input: nums = [0,1,3,50,75], lower = 0, upper = 99
+Output: [[2,2],[4,49],[51,74],[76,99]]
+#####################################################################################################################
+Q=>Given an array of meeting time intervals where intervals[i] = [starti, endi],
+determine if a person could attend all meetings.
+Sol=>
+#include <vector>
+#include <algorithm>
+
+bool canAttendMeetings(std::vector<std::vector<int>>& intervals) {
+    std::sort(intervals.begin(), intervals.end(), [](const auto& a, const auto& b) {
+        return a[0] < b[0];
+    });
+
+    for (int i = 1; i < intervals.size(); ++i) {
+        if (intervals[i][0] <= intervals[i - 1][1]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+int main() {
+    int n;
+    std::cout << "Enter the number of intervals: ";
+    std::cin >> n;
+
+    std::vector<std::vector<int>> intervals(n, std::vector<int>(2));
+    std::cout << "Enter the start and end times of each interval: ";
+    for (int i = 0; i < n; ++i) {
+        std::cin >> intervals[i][0] >> intervals[i][1];
+    }
+
+    bool canAttendAll = canAttendMeetings(intervals);
+
+    if (canAttendAll) {
+        std::cout << "The person can attend all meetings." << std::endl;
+    } else {
+        std::cout << "The person cannot attend all meetings." << std::endl;
+    }
+
+    return 0;
+}
+
+Input: intervals = [[0,30],[5,10],[15,20]]
+Output: false
